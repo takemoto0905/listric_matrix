@@ -1,0 +1,88 @@
+%input a,b,displacement, ps, phi, xo,
+
+ramp=29*pi/180;
+yo=xo*tan(pi/2-ramp);
+R=norm([xo,yo]);
+xf=xo-R*sin(phi);
+yf=yo-R*cos(phi);
+vx=-v*cos(phi);
+vy=v*sin(phi);
+
+pointset1
+
+load 'observed1.txt'
+X = observed1(:, 1);
+Y = observed1(:, 2);
+observed_points = [X, Y];
+
+video_filename = 'trishear_animation1.mp4'; % ファイル名
+video_obj = VideoWriter(video_filename, 'MPEG-4');
+video_obj.FrameRate = 30; % フレームレート
+open(video_obj);
+
+figure;
+hold on;
+axis equal;
+axis([-1000 3000 -5000 500] ); % 描画範囲を固定
+grid on;
+xlabel('X-axis');
+ylabel('Y-axis');
+title('Trishear forward model');
+
+trajectoryxf = zeros(1, time_steps);
+trajectoryyf = zeros(1, time_steps);
+
+for t = 1:time_steps
+    dist_matrix = sqrt((x_matrix - xo).^2 + (y_matrix - yo).^2);
+  
+    cond1 = y_matrix <= -tan(ramp - b) .* (x_matrix - xf) + yf & dist_matrix > R;
+
+    cond2 = y_matrix < -tan(ramp + a) .* (x_matrix - xf) + yf & y_matrix > -tan(ramp - b) .* (x_matrix - xf) + yf;
+
+    cond3 = ~cond1 & ~cond2;
+    
+    u = -(yf - y_matrix(cond2)) ./ (xf - x_matrix(cond2));
+    w = ramp - atan(u);
+    x_matrix(cond2) = x_matrix(cond2) + vx * ((tan(b) - tan(w)) ./ (tan(b) + tan(a)));
+    y_matrix(cond2) = y_matrix(cond2) + vy * ((tan(b) - tan(w)) ./ (tan(b) + tan(a)));
+
+    x_matrix(cond3) = x_matrix(cond3) + vx;
+    y_matrix(cond3) = y_matrix(cond3) + vy;
+
+    xf = xf + ps * vx;
+    yf = yf + ps * vy;
+    phi = phi + v / R;
+    vx = -v * cos(phi);
+    vy = v * sin(phi);
+
+    trajectoryxf(t) = xf;
+    trajectoryyf(t) = yf;
+
+    for i = 1:num_bed
+        if isgraphics(layer_plots(i))
+            delete(layer_plots(i));
+        end
+        layer_plots(i) = plot(x_matrix(i,:), y_matrix(i,:), 'b.');
+    end
+    set(fault_tip_plot, 'XData', xf, 'YData', yf);
+    set(trajectory_plot, 'XData', trajectoryxf(1:t), 'YData', trajectoryyf(1:t));
+
+    % Shear zone境界線を更新
+    x_line1 = xf:(-50):-1000;
+    x_line2 = xf:(-50):-1000;
+    y_line1 = -tan(ramp - b) * (x_line1 - xf) + yf;
+    y_line2 = -tan(ramp + a) * (x_line2 - xf) + yf;
+    set(boundary_plot1, 'XData', x_line1, 'YData', y_line1);
+    set(boundary_plot2, 'XData', x_line2, 'YData', y_line2);
+
+    % フレームをビデオに書き込む
+    frame = getframe(gcf);
+    writeVideo(video_obj, frame);
+
+    % 描画の更新
+    drawnow;
+end
+
+% ビデオライターを閉じる
+close(video_obj);
+hold off;
