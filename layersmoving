@@ -1,0 +1,31 @@
+
+yo = xo * tan(pi / 2 - ramp);
+R = norm([xo, yo]);
+xf = xo - R * sin(phi);
+yf = yo - R * cos(phi);
+vx = -v * cos(phi);
+vy = v * sin(phi);
+
+for t = 1:time_steps
+    dist_matrix = sqrt((x_matrix - xo).^2 + (y_matrix - yo).^2);
+  
+    cond1 = y_matrix <= -tan(ramp - b) .* (x_matrix - xf) + yf & dist_matrix > R;
+
+    cond2 = y_matrix < -tan(ramp + a) .* (x_matrix - xf) + yf & y_matrix > -tan(ramp - b) .* (x_matrix - xf) + yf;
+
+    cond3 = ~cond1 & ~cond2;
+    
+    u = -(yf - y_matrix(cond2)) ./ (xf - x_matrix(cond2));
+    w = ramp - atan(u);
+    x_matrix(cond2) = x_matrix(cond2) + vx * ((tan(b) - tan(w)) ./ (tan(b) + tan(a)));
+    y_matrix(cond2) = y_matrix(cond2) + vy * ((tan(b) - tan(w)) ./ (tan(b) + tan(a)));
+
+    x_matrix(cond3) = x_matrix(cond3) + vx;
+    y_matrix(cond3) = y_matrix(cond3) + vy;
+
+    xf = xf + ps * vx;
+    yf = yf + ps * vy;
+    phi = phi + v / R;
+    vx = -v * cos(phi);
+    vy = v * sin(phi);
+end
