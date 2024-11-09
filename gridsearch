@@ -1,6 +1,12 @@
 preparation;
 
+SCORE=[];
+
 for n = 1:size(param_comb, 1)
+
+    if mod(n, 100000) == 0
+        disp(['現在のループ: ', num2str(n), '回目']);
+    end
 
     param_set = param_comb(n, :);
     a = param_set(1);
@@ -16,6 +22,8 @@ for n = 1:size(param_comb, 1)
     serchingpoints;
 
     [best_score, best_param] = evaluation(RA, ra, param_set, best_score, best_param);
+    score=norm(RA-ra);
+    SCORE=cat(2,SCORE,score);
 
 end
 
@@ -26,3 +34,4 @@ disp('最適パラメータセット(a, b, displacement, ps, phi, xo)=');
 disp(best_param);
 
 save 'best_parameter' best_param;
+plot(SCORE)
