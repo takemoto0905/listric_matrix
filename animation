@@ -58,12 +58,9 @@ for t = 1:time_steps
     trajectoryxf(t) = xf;
     trajectoryyf(t) = yf;
 
-    for i = 1:num_bed
-        if isgraphics(layer_plots(i))
-            delete(layer_plots(i));
-        end
-        layer_plots(i) = plot(x_matrix(i,:), y_matrix(i,:), 'b.');
-    end
+    plot(x_matrix, y_matrix, 'b');
+    hold on;
+    
     set(fault_tip_plot, 'XData', xf, 'YData', yf);
     set(trajectory_plot, 'XData', trajectoryxf(1:t), 'YData', trajectoryyf(1:t));
 
