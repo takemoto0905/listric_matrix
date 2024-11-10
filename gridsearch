@@ -15,6 +15,7 @@ for n = 1:size(param_comb, 1)
     ps = param_set(4);
     phi = param_set(5);
     xo = param_set(6);
+    v=displacement/time_steps;
 
     
     pointset;
