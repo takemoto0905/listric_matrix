@@ -8,7 +8,7 @@ yf=yo-R*cos(phi);
 vx=-v*cos(phi);
 vy=v*sin(phi);
 
-pointset1
+pointset;
 
 load 'observed1.txt'
 X = observed1(:, 1);
