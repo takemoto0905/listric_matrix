@@ -2,7 +2,7 @@ num_bed=30:
 
 x_range=-500:50:3000;
 
-x_matrix=repmat(x_range, numbed,1);
+x_matrix=repmat(x_range, num_bed,1);
 y_matrix=zeros(num_bed,length(x_matrix));
 
 for i=1:num_bed
