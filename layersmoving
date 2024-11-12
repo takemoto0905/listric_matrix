@@ -1,4 +1,6 @@
-
+a=a*pi/180;
+b=b*pi/180;
+phi=phi*pi/180;
 yo = xo * tan(pi / 2 - ramp);
 R = norm([xo, yo]);
 xf = xo - R * sin(phi);
