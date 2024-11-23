@@ -4,19 +4,17 @@ SCORE=[];
 
 for n = 1:size(param_comb, 1)
 
-    if mod(n, 100000) == 0
+    if mod(n, 500000) == 0
         disp(['現在のループ: ', num2str(n), '回目']);
     end
 
     param_set = param_comb(n, :);
     a = param_set(1);
     b = param_set(2);
-    displacement = param_set(3);
-    ps = param_set(4);
-    phi = param_set(5);
+    ps = param_set(3);
+    phis = param_set(4);
+    phif = param_set(5);
     xo = param_set(6);
-    v=displacement/time_steps;
-
     
     pointset;
     layersmoving;
