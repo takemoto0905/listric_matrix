@@ -28,8 +28,7 @@ end
 
 r=best_score;
 ave=r^2/11;
-R=ave^(1/2);
-R=R*180/pi;
+R=(ave^(1/2))*180/pi;
 
 disp('best_score=');
 disp(best_score);
