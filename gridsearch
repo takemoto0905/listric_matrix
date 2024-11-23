@@ -26,8 +26,16 @@ for n = 1:size(param_comb, 1)
 
 end
 
+r=best_score;
+ave=r^2/11;
+R=ave^(1/2);
+R=R*180/pi;
+
 disp('best_score=');
 disp(best_score);
+
+disp('誤差平均=');
+disp(R);
 
 disp('最適パラメータセット(a, b, displacement, ps, phi, xo)=');
 disp(best_param);
