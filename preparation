@@ -1,16 +1,16 @@
 clear all
 a = 10:5:50;
-b = 0:3:18;
-displacement = 0:25:3000;
+b = 0:4:20;
 ps = 1:0.2:5;
-phi = 0:2:28;
+phis = 0:2:28;
+phif = 30:2:89;
 xo = 10:50:1000;
 
-time_steps = 200;
+time_steps = 100;
 ramp = 29 * pi / 180;
 
 % パラメータ組み合わせの行列生成
-[P1, P2, P3, P4, P5, P6] = ndgrid(a, b, displacement, ps, phi, xo);
+[P1, P2, P3, P4, P5, P6] = ndgrid(a, b, ps, phis, phif, xo);
 param_comb = [P1(:), P2(:), P3(:), P4(:), P5(:), P6(:)];
 
 % 観測データの読み込み
