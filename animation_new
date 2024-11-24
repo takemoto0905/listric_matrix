@@ -1,52 +1,53 @@
-%input a,b,ps,phis,phif,xo
+clear all;
 
-clear all
+a = 50;
+b = 12;
+ps = 2.2;
+phis = 8;
+phif = 63;
+xo = 2800;
 
+% パラメータの設定
 ramp = 29 * pi / 180;
-a=a*pi/180;
-b=b*pi/180;
-phi=phis*pi/180;
-phif=phif*pi/180;
+a = a * pi / 180;
+b = b * pi / 180;
+phi = phis * pi / 180;
+phif = phif * pi / 180;
 
-time_steps=100;
+time_steps = 100;
 yo = xo * tan(pi / 2 - ramp);
 R = norm([xo, yo]);
-displacement=R*(phif-phi);
+displacement = R * (phif - phi);
 
 xf = xo - R * sin(phi);
 yf = yo - R * cos(phi);
-v=displacement/time_steps;
+v = displacement / time_steps;
 vx = -v * cos(phi);
 vy = v * sin(phi);
 
 pointset;
 
-load 'observed1.txt'
+% 観測点の読み込み
+load 'observed1.txt';
 X = observed1(:, 1);
 Y = observed1(:, 2);
-observed_points = [X, Y];
 
-video_filename = 'trishear_animation.mp4';
-video_obj = VideoWriter(video_filename, 'MPEG-4');
-video_obj.FrameRate = 30;
-open(video_obj);
-
+% アニメーションの作成
 figure;
 hold on;
 axis equal;
-axis([-500 2000 -300 300]); % Fixed axis range
 grid on;
 xlabel('X軸(m)');
 ylabel('Y軸(m)');
 title('Trishear listric model');
 
-plot(X, Y, 'k.', 'MarkerSize', 10); % Always visible
+% 観測点をプロット
+plot(X, Y, 'k.', 'MarkerSize', 10);
 
 trajectoryxf = zeros(1, time_steps);
 trajectoryyf = zeros(1, time_steps);
 
 for t = 1:time_steps
-    % Calculate distances and conditions for updating points
     dist_matrix = sqrt((x_matrix - xo).^2 + (y_matrix - yo).^2);
     cond1 = y_matrix <= -tan(ramp - b) .* (x_matrix - xf) + yf & dist_matrix > R;
     cond2 = y_matrix < -tan(ramp + a) .* (x_matrix - xf) + yf & y_matrix > -tan(ramp - b) .* (x_matrix - xf) + yf;
@@ -69,28 +70,17 @@ for t = 1:time_steps
     trajectoryxf(t) = xf;
     trajectoryyf(t) = yf;
 
-    cla; % Clear axes to redraw dynamic elements
-    plot(X, Y, 'k.', 'MarkerSize', 10); % Re-plot observed points
-    plot(x_matrix, y_matrix, 'b.'); % Plot layers in blue
-    plot(xf, yf, 'ro', 'MarkerSize', 8); % Plot fault tip
-    plot(trajectoryxf(1:t), trajectoryyf(1:t), 'r', 'LineWidth', 1.5); % Plot fault tip trajectory
+    % 動的な更新部分
+    cla;
+    plot(X, Y, 'k.', 'MarkerSize', 10); % 観測点を再描画
+    plot(x_matrix, y_matrix, 'b.'); % 層の位置を描画
+    plot(xf, yf, 'ro', 'MarkerSize', 8); % 断層の先端を描画
+    plot(trajectoryxf(1:t), trajectoryyf(1:t), 'r', 'LineWidth', 1.5); % 断層先端の軌跡を描画
 
-    frame = getframe(gcf);
-    writeVideo(video_obj, frame);
+    % アニメーションを更新
     drawnow;
 end
 
 searchingpoints;
-cla;
-plot(X, Y, 'k.', 'MarkerSize', 10);
-plot(x_matrix, y_matrix, 'b.');
-plot(xf, yf, 'ro', 'MarkerSize', 8);
-plot(trajectoryxf, trajectoryyf, 'r', 'LineWidth', 1.5);
-
-plot(closest_points(:, 1), closest_points(:, 2), 'go', 'MarkerSize', 10, 'LineWidth', 2);
-
-frame = getframe(gcf);
-writeVideo(video_obj, frame);
-
-close(video_obj);
+plot(closest_points,'MarkerFaceColer','go');
 hold off;
