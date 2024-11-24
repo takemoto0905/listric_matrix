@@ -6,6 +6,10 @@ for n = 1:size(param_comb, 1)
 
     if mod(n, 500000) == 0
         disp(['現在のループ: ', num2str(n), '回目']);
+        disp('最適パラメータセット [a b ps phis phif xo]=');
+        disp(best_param);
+        disp('best_score=');
+        disp(best_score);
     end
 
     param_set = param_comb(n, :);
@@ -18,7 +22,7 @@ for n = 1:size(param_comb, 1)
     
     pointset;
     layersmoving;
-    serchingpoints;
+    searchingpoints;
 
     [best_score, best_param] = evaluation(RA, ra, param_set, best_score, best_param);
     score=norm(RA-ra);
@@ -34,7 +38,7 @@ disp('best_score=');
 disp(best_score);
 
 disp('誤差平均=');
-disp(R);
+disp([num2str(R), '°']);
 
 disp('最適パラメータセット(a, b, displacement, ps, phi, xo)=');
 disp(best_param);
