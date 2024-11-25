@@ -1,12 +1,12 @@
 a=a*pi/180;
 b=b*pi/180;
-phis=phis*pi/180;
+phi=phis*pi/180;
 phif=phif*pi/180;
+ramp=ramp*pi/180;
 yo = xo * tan(pi / 2 - ramp);
 R = norm([xo, yo]);
 displacement=(phif-phis)*R/ps;
 v=displacement/time_steps;
-phi=phis;
 xf = xo - R * sin(phi);
 yf = yo - R * cos(phi);
 vx = -v * cos(phi);
