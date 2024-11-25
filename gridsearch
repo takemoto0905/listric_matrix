@@ -1,7 +1,5 @@
 preparation;
 
-SCORE=[];
-
 for n = 1:size(param_comb, 1)
 
     if mod(n, 500000) == 0
@@ -25,10 +23,11 @@ for n = 1:size(param_comb, 1)
     searchingpoints;
 
     [best_score, best_param] = evaluation(RA, ra, param_set, best_score, best_param);
-    score=norm(RA-ra);
-    SCORE=cat(2,SCORE,score);
 
 end
+
+disp('最近接点は');
+disp(closest_points)
 
 r=best_score;
 ave=r^2/11;
@@ -37,11 +36,10 @@ R=(ave^(1/2))*180/pi;
 disp('best_score=');
 disp(best_score);
 
-disp('誤差平均=');
+disp(' (誤差平均) =');
 disp([num2str(R), '°']);
 
-disp('最適パラメータセット(a, b, displacement, ps, phi, xo)=');
+disp('最適パラメータセット (a, b, displacement, ps, phi, xo) =');
 disp(best_param);
 
 save 'best_parameter' best_param;
-plot(SCORE)
