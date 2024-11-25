@@ -11,7 +11,7 @@ time_steps = 100;
 ramp = 29 * pi / 180;
 
 % パラメータ組み合わせの行列生成
-[P1, P2, P3, P4, P5, P6] = ndgrid(a, b, ps, phis, phif, xo, ramp);
+[P1, P2, P3, P4, P5, P6，P7] = ndgrid(a, b, ps, phis, phif, xo, ramp);
 param_comb = [P1(:), P2(:), P3(:), P4(:), P5(:), P6(:), P7(:)];
 
 % 観測データの読み込み
@@ -23,4 +23,4 @@ observed_points = [X, Y];
 
 % 最適スコアとパラメータセットの初期化
 best_score = inf;
-best_param = zeros(1, 6);
+best_param = zeros(1, 7);
