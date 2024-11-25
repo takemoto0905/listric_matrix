@@ -17,6 +17,7 @@ for n = 1:size(param_comb, 1)
     phis = param_set(4);
     phif = param_set(5);
     xo = param_set(6);
+    ramp = param_set(7);
     
     pointset;
     layersmoving;
