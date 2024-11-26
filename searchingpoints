@@ -37,6 +37,8 @@ for m = 1:length(X)
         ra_value = (ra_value1 + ra_value2) / 2;
     end
 
+%傾斜計算は、平均値ではなく前後の2点で求めた方がうまくいくのでは？
+
     % 結果を格納
     closest_points(m, :) = nearest_point;
     ra(m) = ra_value;
