@@ -1,7 +1,7 @@
 % 初期化
 closest_points = zeros(size(observed_points));
 ra = zeros(size(observed_points, 1), 1);
-score = inf;  % 初期値を無限大に設定
+Score = 1000;  
 
 % 各観測点に対して処理
 for m = 1:length(X)
@@ -14,9 +14,9 @@ for m = 1:length(X)
     % 最近点の距離とインデックスを取得
     [min_distance, min_index] = min(dist_matrix(:));
 
-    % 距離が100を超えた場合、ループを終了しscoreをinfに設定
-    if min_distance > 100
-        score = inf;
+    % 距離が50を超えた場合、ループを終了しscoreをinfに設定
+    if min_distance > 50
+        Score = inf;
         break;
     end
 
@@ -43,6 +43,11 @@ for m = 1:length(X)
 end
 
 % 距離条件を満たす場合のみスコアを計算
-if score ~= inf
-    score = norm(Ra - ra);
+if Score ~= inf
+    Score = norm(RA - ra);
+    Count=Count+1;
+
+    SCORE=cat(2,SCORE,Score);
 end
+
+
