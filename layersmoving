@@ -3,6 +3,7 @@ b=b*pi/180;
 phis=phis*pi/180;
 phif=phif*pi/180;
 ramp=ramp*pi/180;
+
 yo = xo * tan(pi / 2 - ramp);
 R = norm([xo, yo]);
 displacement=(phif-phis)*R/ps;
